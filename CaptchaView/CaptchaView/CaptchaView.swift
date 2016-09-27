@@ -10,14 +10,14 @@ import UIKit
 
 class CaptchaView: UIView {
 
-    var dataArray:[String]!//字符素材数组
-    var authCodeStr:String!//验证码字符串
+    private var dataArray:[String]!//字符素材数组
+    private var authCodeStr:String!//验证码字符串
     
-    let kRandomColor = UIColor(red: CGFloat(arc4random()) % 256 / 256.0, green: CGFloat(arc4random()) % 256 / 256.0, blue: CGFloat(arc4random()) % 256 / 256.0, alpha: 1)
-    let kLineCount = 5
-    let kLineWidth:CGFloat = 1.0
-    let kCharCount = 5
-    let kFontSize = UIFont.systemFontOfSize(CGFloat(arc4random()) % 5 + 15)
+    private let kRandomColor = UIColor(red: CGFloat(arc4random()) % 256 / 256.0, green: CGFloat(arc4random()) % 256 / 256.0, blue: CGFloat(arc4random()) % 256 / 256.0, alpha: 1)
+    private let kLineCount = 5
+    private let kLineWidth:CGFloat = 1.0
+    private let kCharCount = 5
+    private let kFontSize = UIFont.systemFontOfSize(CGFloat(arc4random()) % 5 + 15)
     
     
     override init(frame: CGRect)
@@ -37,7 +37,7 @@ class CaptchaView: UIView {
     func getAuthCode()
     {
         dataArray = [
-            "0","1","2","3","4","5","6","7","8","9",
+                "0","1","2","3","4","5","6","7","8","9",
             "Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
             "q","w","e","r","t","y","u","i","o","p","a","s","d","f","g","h","j","k","l","z","x","c","v","b","m"
         ]
@@ -88,24 +88,26 @@ class CaptchaView: UIView {
         }
         
         //调用drawRect：之前，系统会向栈中压入一个CGContextRef，调用UIGraphicsGetCurrentContext()会取栈顶的CGContextRef
-        let context = UIGraphicsGetCurrentContext()
-        //设置线条宽度
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext()!, kLineWidth)
-        
-        //绘制干扰线
-        for _ in 0..<kLineCount
+        if let context = UIGraphicsGetCurrentContext()
         {
-            CGContextSetStrokeColorWithColor(context!, kRandomColor.CGColor)
-            //设置线的起点
-            pX = CGFloat(arc4random()) % rect.size.width
-            pY = CGFloat(arc4random()) % rect.size.height
-            CGContextMoveToPoint(context!, pX, pY)
-            //设置线终点
-            pX = CGFloat(arc4random()) % rect.size.width
-            pY = CGFloat(arc4random()) % rect.size.height
-            CGContextAddLineToPoint(context!, pX, pY)
-            //画线
-            CGContextStrokePath(context!);
+            //设置线条宽度
+            CGContextSetLineWidth(context, kLineWidth)
+            
+            //绘制干扰线
+            for _ in 0..<kLineCount
+            {
+                CGContextSetStrokeColorWithColor(context, kRandomColor.CGColor)
+                //设置线的起点
+                pX = CGFloat(arc4random()) % rect.size.width
+                pY = CGFloat(arc4random()) % rect.size.height
+                CGContextMoveToPoint(context, pX, pY)
+                //设置线终点
+                pX = CGFloat(arc4random()) % rect.size.width
+                pY = CGFloat(arc4random()) % rect.size.height
+                CGContextAddLineToPoint(context, pX, pY)
+                //画线
+                CGContextStrokePath(context);
+            }
         }
     }
     
